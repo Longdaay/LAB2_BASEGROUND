@@ -9,6 +9,22 @@
 
 using namespace std;
 
+#define BLACK 0
+#define BLUE 1
+#define GREEN 2
+#define RED 4
+#define MAGENTA 5
+#define BROWN 6
+#define LIGHTGRAY 7
+#define DARKGRAY 8
+#define LIGHTBLUE 9
+#define LIGHTGREEN 10
+#define LIGHTCYAN 11
+#define LIGHTRED 12
+#define LIGHTMAGENTA 13
+#define YELLOW 14
+#define WHITE 15
+
 char space[255] = "-";
 
 void ColorField(int text, int bg) {
@@ -30,6 +46,8 @@ field::field(int width, int height) {
 	this->fieldWidth = width;
 	this->fieldHeight = height;
 	this->max_countUnits = this->fieldHeight * this->fieldWidth;
+	this->maxMount = this->max_countUnits * 0.1;
+	this->maxWater = this->max_countUnits * 0.1;
 	Field = new Hero * [height];
 	for (int i = 0; i < height; i++) {
 		Field[i] = new Hero[width];
@@ -222,6 +240,19 @@ Landscape* field::pushLand(Landscape* arr, Landscape temp) {
 	return arr;
 }
 
+void field::printLand() {
+	int i = 1;
+	cout << endl;
+	cout << setw(10) << right << "FIELD LIST" << endl;
+	for (int j = 0; j < getSizeLand(); j++) {
+		cout << i++ <<
+			". " << landscapeList[j].getObj() <<
+			": x = " << landscapeList[j].getx() <<
+			" y = " << landscapeList[j].gety() << endl;
+		_getch();
+	}
+}
+
 void field::printList() {
 	int i = 1;
 	cout << endl;
@@ -249,7 +280,7 @@ void field::updateList(int x_hero, int y_hero, int cur_x_hero, int cur_y_hero) {
 	cout << "No hero in position\n";
 	system("pause");
 }
-
+/*
 void field::printfield() {
 	ColorField(2, 0);
 	cout << "HERO MAP\n";
@@ -257,6 +288,42 @@ void field::printfield() {
 	for (int i = 0; i < fieldHeight; i++) {
 		for (int j = 0; j < fieldWidth; j++) {
 			cout << setw(10) << left << Field[i][j].getname() << "\t";
+		}
+		cout << "\n";
+	}
+}*/
+
+char* field::findObjName(int x_pos, int y_pos) {
+	assert(sizeLand >= 0);
+	for (int i = 0; i < sizeLand; i++) {
+		if (landscapeList[i].getx() == x_pos) {
+			if (landscapeList[i].gety() == y_pos)
+				return landscapeList[i].getObj();
+		}
+	}
+}
+
+void field::printfield() {
+	ColorField(2, 0);
+	cout << "HERO MAP\n";
+	ColorField(7, 0);
+	for (int i = 0; i < fieldHeight; i++) {
+		for (int j = 0; j < fieldWidth; j++) {
+			if (checkList(i, j)) {
+				char names[255];
+				strcpy(names, findObjName(i, j));
+				if (names == "Water")
+					ColorField(WHITE, BLUE);
+				else if (names == "Earth")
+					ColorField(BLACK, BROWN);
+				else
+					ColorField(BLACK, LIGHTGRAY);
+				cout << setw(15) << left << findObjName(i,j) << "\t";
+				ColorField(7, 0);
+			} 
+			else {
+				cout << setw(10) << left << Field[i][j].getname() << "\t";
+			}
 		}
 		cout << "\n";
 	}
@@ -286,10 +353,10 @@ bool field::checkList(int x_hero, int y_hero) {
 	for (int i = 0; i < getSizeList(); i++) {
 		if (fieldList[i].x_pos == x_hero) {
 			if (fieldList[i].y_pos == y_hero)
-				return false;
+				return false;						//position is busy
 		}
 	}
-	return true;
+	return true;								    //position is free
 }
 
 bool field::moveHero(field& FieldG, FieldList token) {

@@ -9,8 +9,24 @@
 #include "Hero.h"
 #include "Earth.h"
 
-#define LEN 255
+#define BLACK 0
+#define BLUE 1
+#define GREEN 2
+#define RED 4
+#define MAGENTA 5
+#define BROWN 6
+#define LIGHTGRAY 7
+#define DARKGRAY 8
+#define LIGHTBLUE 9
+#define LIGHTGREEN 10
+#define LIGHTCYAN 11
+#define LIGHTRED 12
+#define LIGHTMAGENTA 13
+#define YELLOW 14
+#define WHITE 15
 
+#define LEN 255
+//check git
 
 using namespace std;
 
@@ -164,31 +180,55 @@ void createField() {
 	menuPlay(FieldG);
 }
 
-void fillLandscape(field& FieldG) {
+Landscape* fillLandscape(field& FieldG) {
 	Earth earth;
-	FieldList temp;
- 	Landscape* tempLand = NULL;
-	FieldList* tempList = NULL;
-	tempList = FieldG.pushBack(tempList, temp);
-	tempLand = FieldG.pushLand(tempLand, earth);
+	Landscape* tempLand = NULL;
 	const int TypeLandSize = 3;
 	srand(time(NULL));
+	bool stop = TRUE;
+	char* tempW = new char [LEN] {"Water"};
+	char* tempM = new char [LEN] {"Mount"};
+	char* tempE = new char [LEN] {"Earth"};
+	int cur_W = 0;
+	int cur_M = 0;
 	char LandType[TypeLandSize][LEN] = {"Earth", "Water", "Mount"};
 	for (int i = 0; i < FieldG.getHeight(); i++) {
 		for (int j = 0; j < FieldG.getWidth(); j++) {
-			int tempI = rand() % 3;
-			switch (tempI)
-			{
-			case 1:
-				earth.setx(i);
-				earth.sety(j);
-				tempLand->pushBack(tempLand, earth);
-				break;
-			default:
-				break;
+			earth.setobject(tempE);
+			stop = TRUE;
+			while (stop) {
+				int tempI = rand() % 100;
+				if (tempI >= 0 && tempI <= 40)
+				{
+					earth.setx(i);
+					earth.sety(j);
+					tempLand = FieldG.pushLand(tempLand, earth);
+					stop = FALSE;
+				}
+				else if (tempI > 40 && tempI <= 80) {
+					if (cur_W == FieldG.getMaxWater())
+						break;
+					earth.setx(i);
+					earth.sety(j);
+					earth.setobject(tempW);
+					tempLand = FieldG.pushLand(tempLand, earth);
+					cur_W++;
+					stop = FALSE;
+				}
+				else {
+					if (cur_M == FieldG.getMaxMount())
+						break;
+					earth.setx(i);
+					earth.sety(j);
+					earth.setobject(tempM);
+					tempLand = FieldG.pushLand(tempLand, earth);
+					cur_M++;
+					stop = FALSE;
+				}
 			}
 		}
 	}
+	return tempLand;
 }
 
 void menuDeleteUnitChoice(field& FieldG) {
@@ -447,6 +487,7 @@ void menu() {
 	menuChoice();
 }
 
+
 void test_fill() {
 	field FieldG(5, 5);
 	Archer arch;
@@ -460,16 +501,20 @@ void test_fill() {
 }
 
 void test_Land() {
-	field FieldG(5, 5);
-	fillLandscape(FieldG);
-	Landscape* temp = FieldG.getLand();
-	temp->printLand(temp);
+	field FieldG(7, 25);
+	FieldG.setLand(fillLandscape(FieldG));
+	FieldG.printLand();
+	system("pause");
+	system("cls");
+	FieldG.printfield();
 	system("pause");
 }
 
 int main() {
-	test_Land();
+
+	
 	system("mode con cols=200 lines=50");
+	test_Land();
 	menu();
 	//test_fill();
 

@@ -19,7 +19,9 @@ public:
 	FieldList* pushBack(FieldList* arr, FieldList temp);
 	FieldList* erase(FieldList* arr, int index);
 	Landscape* pushLand(Landscape* arr, Landscape temp);
+	char* findObjName(int x_pos, int y_pos);
 	void printList();
+	void printLand();
 	void updateList(int x_hero, int y_hero, int cur_x_hero, int cur_y_hero);
 	void updatefield(field& Fieldp, int prev_x, int prev_y, int cur_x, int cur_y);
 	void swapHero(Hero* first_p, Hero* second_p);
@@ -30,18 +32,27 @@ public:
 	FieldList* getList() { return fieldList; }
 	Landscape* getLand() { return landscapeList; }
 	int getSizeList() { return sizeList; }
+	int getSizeLand() { return sizeLand; }
+	int getMaxWater() { return maxWater; }
+	int getMaxMount() { return maxMount; }
 	int getCurrentCountUnit() { return current_countUnits; }
 	int getMaxCountUnit() { return max_countUnits; }
+
+	void setLand(Landscape* landscape) { this->landscapeList = landscape; }
 
 	field& operator= (field const& FieldG);
 private:
 	Hero** Field;
 	int fieldWidth = 0;
 	int fieldHeight = 0;
-	FieldList* fieldList;
-	Landscape* landscapeList;
-	int sizeList = 0;
-	int sizeLand = 0;
 	int current_countUnits = 0;
 	int max_countUnits = 0;
+	
+	Landscape* landscapeList;
+	int sizeLand = 0;
+	int maxWater = 0;
+	int maxMount = 0;
+
+	FieldList* fieldList;
+	int sizeList = 0;
 };

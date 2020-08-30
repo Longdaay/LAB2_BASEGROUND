@@ -12,7 +12,7 @@ using namespace std;
 
 Landscape::Landscape() {
 	char* temp = new char[LEN] { "-" };
-	this->object = setobject(temp);
+	this->object = temp;
 	this->x = x;
 	this->y = y;
 }
@@ -20,18 +20,16 @@ Landscape::Landscape() {
 Landscape::Landscape(const char object[], int x, int y) {
 	char* temp = new char[LEN] {};
 	strcpy(temp, object);
-	this->object = setobject(temp);
+	this->object = temp;
 	this->x = x;
 	this->y = y;
 }
-
+/*/
 Landscape::~Landscape() {
 	delete[] this->object;
-}
-
-char* Landscape::setobject(char* object) {
+}*/
+void Landscape::setobject(char* object) {
 	this->object = object;
-	return this->object;
 }
 
 /*
@@ -65,19 +63,9 @@ Landscape* Landscape::erase(Landscape* arr, int index) {
 	this->sizeLand--;
 	return arr;
 }
+*/
 
-void Landscape::printLand(Landscape* landscapeList) {
-	int i = 1;
-	cout << endl;
-	cout << setw(10) << right << "FIELD LIST" << endl;
-	for (int j = 0; j < getsizeLand(); j++) {
-		cout << i++ <<
-			". " << landscapeList[j].object <<
-			": x = " << landscapeList[j].x <<
-			" y = " << landscapeList[j].y << endl;
-	}
-}
-
+/*
 void Landscape::updateLand(Landscape* landscapeList, int x_hero, int y_hero, int cur_x_hero, int cur_y_hero) {
 	for (int i = 0; i < getsizeLand(); i++) {
 		if (landscapeList[i].x == x_hero) {
