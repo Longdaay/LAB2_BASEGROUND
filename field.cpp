@@ -249,7 +249,6 @@ void field::printLand() {
 			". " << landscapeList[j].getObj() <<
 			": x = " << landscapeList[j].getx() <<
 			" y = " << landscapeList[j].gety() << endl;
-		_getch();
 	}
 }
 
@@ -312,9 +311,9 @@ void field::printfield() {
 			if (checkList(i, j)) {
 				char names[255];
 				strcpy(names, findObjName(i, j));
-				if (names == "Water")
+				if (names[0] == 'W')
 					ColorField(WHITE, BLUE);
-				else if (names == "Earth")
+				else if (names[0] == 'E')
 					ColorField(BLACK, BROWN);
 				else
 					ColorField(BLACK, LIGHTGRAY);

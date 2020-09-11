@@ -198,32 +198,31 @@ Landscape* fillLandscape(field& FieldG) {
 			stop = TRUE;
 			while (stop) {
 				int tempI = rand() % 100;
-				if (tempI >= 0 && tempI <= 40)
-				{
+				if (tempI >= 0 && tempI <= 40) {
 					earth.setx(i);
 					earth.sety(j);
 					tempLand = FieldG.pushLand(tempLand, earth);
 					stop = FALSE;
 				}
 				else if (tempI > 40 && tempI <= 80) {
-					if (cur_W == FieldG.getMaxWater())
-						break;
-					earth.setx(i);
-					earth.sety(j);
-					earth.setobject(tempW);
-					tempLand = FieldG.pushLand(tempLand, earth);
-					cur_W++;
-					stop = FALSE;
+					if (cur_W != FieldG.getMaxWater()) {
+						earth.setx(i);
+						earth.sety(j);
+						earth.setobject(tempW);
+						tempLand = FieldG.pushLand(tempLand, earth);
+						cur_W++;
+						stop = FALSE;
+					}
 				}
 				else {
-					if (cur_M == FieldG.getMaxMount())
-						break;
-					earth.setx(i);
-					earth.sety(j);
-					earth.setobject(tempM);
-					tempLand = FieldG.pushLand(tempLand, earth);
-					cur_M++;
-					stop = FALSE;
+					if (cur_M != FieldG.getMaxMount()) {
+						earth.setx(i);
+						earth.sety(j);
+						earth.setobject(tempM);
+						tempLand = FieldG.pushLand(tempLand, earth);
+						cur_M++;
+						stop = FALSE;
+					}
 				}
 			}
 		}
@@ -501,11 +500,11 @@ void test_fill() {
 }
 
 void test_Land() {
-	field FieldG(7, 25);
+	field FieldG(7,20);
 	FieldG.setLand(fillLandscape(FieldG));
 	FieldG.printLand();
 	system("pause");
-	system("cls");
+	//system("cls");
 	FieldG.printfield();
 	system("pause");
 }
